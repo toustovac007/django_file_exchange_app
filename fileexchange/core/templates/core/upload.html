@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Upload {{ file_type }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <input type="file" name="file"><br><br>
+
+    <button type="submit">Upload</button>
+</form>
+
+<a href="/dashboard/">Back</a>
+</body>
+</html>

@@ -3,6 +3,21 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import File
+from django.contrib.auth import logout
+import os
+
+ALLOWED_EXTENSIONS = {
+    'image': ['.jpg', '.jpeg', '.png'],
+    'video': ['.mp4', '.avi'],
+    'audio': ['.mp3', '.wav'],
+    'text': ['.txt', '.pdf'],
+    '3d': ['.obj', '.fbx']
+}
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
 
 @login_required
 def upload_file(request, file_type):
@@ -10,15 +25,39 @@ def upload_file(request, file_type):
         uploaded_file = request.FILES.get('file')
 
         if uploaded_file:
-            File.objects.create(
+            ext = os.path.splitext(uploaded_file.name)[1].lower()
+
+            if ext not in ALLOWED_EXTENSIONS.get(file_type, []):
+                return render(request, 'core/upload.html', {
+                    'file_type': file_type,
+                    'error': 'Nepodporovaný typ souboru'
+                })
+
+            print("UPLOAD:", uploaded_file.name)
+
+            new_file = File.objects.create(
                 user=request.user,
                 file=uploaded_file,
+                original_name=uploaded_file.name,
                 file_type=file_type
             )
 
-        return redirect('dashboard')
+            print("SAVED:", new_file.file.name)
+
+
+        return redirect('file_list', file_type=file_type)
 
     return render(request, 'core/upload.html', {
+        'file_type': file_type
+    })
+
+
+@login_required
+def file_list(request, file_type):
+    files = File.objects.filter(user=request.user, file_type=file_type)
+
+    return render(request, 'core/file_list.html', {
+        'files': files,
         'file_type': file_type
     })
 
@@ -37,6 +76,15 @@ def register_view(request):
         return redirect('login')
 
     return render(request, 'core/register.html')
+
+
+@login_required
+def delete_file(request, file_id):
+    file = File.objects.get(id=file_id, user=request.user)
+    file.file.delete()
+    file.delete()
+    return redirect('file_list', file_type=file.file_type)
+
 
 
 @login_required
@@ -59,3 +107,41 @@ def login_view(request):
             })
 
     return render(request, 'core/login.html')
+
+@login_required
+def share_file(request, file_id):
+
+    file = File.objects.get(id=file_id)
+
+    if file.user != request.user:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+
+        try:
+            target_user = User.objects.get(username=username)
+
+            file.shared_with.add(target_user)
+
+            return redirect('file_list', file_type=file.file_type)
+
+        except User.DoesNotExist:
+
+            return render(
+                request,
+                'core/share_file.html',
+                {
+                    'file': file,
+                    'error': 'User not found'
+                }
+            )
+
+    return render(
+        request,
+        'core/share_file.html',
+        {
+            'file': file
+        }
+    )

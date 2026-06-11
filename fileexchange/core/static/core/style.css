@@ -1,0 +1,180 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+}
+
+/* Layout */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.user-info {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.logout {
+    margin-left: 10px;
+    color: red;
+}
+
+/* Navigation */
+nav {
+    margin-top: 15px;
+}
+
+nav a {
+    text-decoration: none;
+    margin-right: 15px;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Main content */
+main {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Forms */
+form {
+    max-width: 300px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* File cards */
+.file-card {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-card a {
+    text-decoration: none;
+    color: #333;
+}
+
+.file-actions a {
+    color: red;
+    text-decoration: none;
+}
+
+/* Empty state */
+.empty {
+    color: #777;
+}
+
+
+/* GRID */
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* CARD */
+.file-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    transition: transform 0.1s ease;
+}
+
+.file-card:hover {
+    transform: scale(1.03);
+}
+
+/* IMAGE PREVIEW */
+.file-preview img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* ICON */
+.file-icon {
+    font-size: 50px;
+    margin: 20px 0;
+}
+
+/* FILE NAME */
+.file-name {
+    font-size: 14px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    margin-top: 10px;
+}
+
+/* ACTIONS */
+.file-actions {
+    margin-top: 10px;
+}
+
+.file-actions a {
+    color: red;
+    text-decoration: none;
+    font-size: 12px;
+}
+/* VIDEO */
+.file-preview video {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* AUDIO */
+.audio-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.audio-preview audio {
+    width: 100%;
+}

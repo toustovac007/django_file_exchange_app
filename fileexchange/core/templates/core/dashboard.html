@@ -5,10 +5,33 @@
     <title>Title</title>
 </head>
 <body>
-    <h2>Dashboard</h2>
 
-    <p>Přihlášen jako: {{ request.user.username }}</p>
 
-    <a href="/">Zpět na login</a>
+
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h2>Dashboard</h2>
+
+<p>Vyber kategorii z menu nahoře.</p>
+
+{% endblock %}
+
+<p>Přihlášen jako: {{ request.user.username }}</p>
+
+<hr>
+
+<nav>
+    <a href="/files/image/">Images</a> |
+    <a href="/files/video/">Video</a> |
+    <a href="/files/audio/">Audio</a> |
+    <a href="/files/text/">Text</a> |
+    <a href="/files/3d/">3D</a>
+</nav>
+
+<br>
+
+<a href="/logout/">Logout</a>
 </body>
 </html>

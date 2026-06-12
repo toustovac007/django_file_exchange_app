@@ -45,6 +45,23 @@
 
 </div>
 
+        <div class="shared-users">
+
+            {% if file.shared_with.all %}
+
+                Shared with:
+
+                {% for user in file.shared_with.all %}
+                    {{ user.username }}
+                    <a href="/unshare/{{ file.id }}/{{ user.id }}/">✖</a>
+                {% empty %}
+                    nobody
+                {% endfor %}
+
+            {% endif %}
+
+        </div>
+
         <div class="file-name">
             <!--original_name: -->{{ file.original_name }}
             <!--<br>

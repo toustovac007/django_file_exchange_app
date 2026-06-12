@@ -92,6 +92,8 @@ def dashboard(request):
     return render(request, 'core/dashboard.html')
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -122,6 +124,24 @@ def share_file(request, file_id):
 
         try:
             target_user = User.objects.get(username=username)
+            if target_user == request.user:
+                return render(
+                    request,
+                    'core/share_file.html',
+                    {
+                        'file': file,
+                        'error': 'Cannot share file with yourself'
+                    }
+                )
+            if target_user in file.shared_with.all():
+                return render(
+                    request,
+                    'core/share_file.html',
+                    {
+                        'file': file,
+                        'error': 'Already shared with this user'
+                    }
+                )
 
             file.shared_with.add(target_user)
 
@@ -144,4 +164,37 @@ def share_file(request, file_id):
         {
             'file': file
         }
+    )
+
+@login_required
+def shared_files(request):
+
+    files = File.objects.filter(
+        shared_with=request.user
+    )
+
+    return render(
+        request,
+        'core/shared_files.html',
+        {
+            'files': files
+        }
+    )
+
+
+@login_required
+def unshare_file(request, file_id, user_id):
+
+    file = File.objects.get(id=file_id)
+
+    if file.user != request.user:
+        return redirect('dashboard')
+
+    user = User.objects.get(id=user_id)
+
+    file.shared_with.remove(user)
+
+    return redirect(
+        'file_list',
+        file_type=file.file_type
     )

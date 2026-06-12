@@ -12,4 +12,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
     path('share/<int:file_id>/', views.share_file, name='share_file'),
+    path('shared/', views.shared_files, name='shared_files'),
+    path('unshare/<int:file_id>/<int:user_id>/', views.unshare_file, name='unshare_file'
+),
 ]

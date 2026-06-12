@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h2>Shared With Me</h2>
+
+<div class="file-grid">
+
+{% for file in files %}
+
+    <div class="file-card">
+        <div class="file-preview">
+
+        {% if file.file_type == 'image' %}
+
+            <img src="{{ file.file.url }}" alt="">
+
+        {% elif file.file_type == 'video' %}
+
+            <div class="file-icon">🎬</div>
+
+        {% elif file.file_type == 'audio' %}
+
+            <div class="file-icon">🎵</div>
+
+        {% elif file.file_type == 'text' %}
+
+            <div class="file-icon">📄</div>
+
+        {% elif file.file_type == '3d' %}
+
+            <div class="file-icon">🧊</div>
+
+        {% endif %}
+
+        </div>
+
+        <div class="file-name">
+            {{ file.original_name }}
+        </div>
+
+        <p>
+            Owner: {{ file.user.username }}
+        </p>
+
+        <div class="file-actions">
+            <a href="{{ file.file.url }}">
+                Open
+            </a>
+        </div>
+
+    </div>
+
+{% empty %}
+
+    <p>No shared files.</p>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

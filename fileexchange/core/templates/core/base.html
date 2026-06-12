@@ -13,7 +13,10 @@
     <header>
         <h1>File Exchange</h1>
 
-        {% if request.user.is_authenticated %}
+        <p>Authenticated: {{ request.user.is_authenticated }}</p>
+        <p>User: {{ request.user }}</p>
+
+            {% if request.user.is_authenticated %}
             <div class="user-info">
                 Přihlášen jako: <strong>{{ request.user.username }}</strong>
                 <a href="/logout/" class="logout">Logout</a>
@@ -25,6 +28,7 @@
                 <a href="/files/audio/">Audio</a>
                 <a href="/files/text/">Text</a>
                 <a href="/files/3d/">3D</a>
+                <a href="/shared/">Shared With Me</a>
             </nav>
         {% endif %}
     </header>

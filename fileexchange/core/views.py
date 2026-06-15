@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import File
+from .models import File, FileType
 from django.contrib.auth import logout
 import os
 
@@ -35,11 +35,14 @@ def upload_file(request, file_type):
 
             print("UPLOAD:", uploaded_file.name)
 
+            ft = FileType.objects.get(name=file_type)
+
             new_file = File.objects.create(
                 user=request.user,
                 file=uploaded_file,
                 original_name=uploaded_file.name,
-                file_type=file_type
+                file_type=file_type,  # starý sloupec
+                file_type_fk=ft
             )
 
             print("SAVED:", new_file.file.name)
@@ -54,7 +57,8 @@ def upload_file(request, file_type):
 
 @login_required
 def file_list(request, file_type):
-    files = File.objects.filter(user=request.user, file_type=file_type)
+    files = File.objects.filter(user=request.user, file_type_fk__name=file_type
+)
 
     return render(request, 'core/file_list.html', {
         'files': files,
@@ -83,7 +87,7 @@ def delete_file(request, file_id):
     file = File.objects.get(id=file_id, user=request.user)
     file.file.delete()
     file.delete()
-    return redirect('file_list', file_type=file.file_type)
+    return redirect('file_list', file_type=file.file_type_fk.name)
 
 
 
@@ -145,7 +149,7 @@ def share_file(request, file_id):
 
             file.shared_with.add(target_user)
 
-            return redirect('file_list', file_type=file.file_type)
+            return redirect('file_list', file_type=file.file_type_fk.name)
 
         except User.DoesNotExist:
 
@@ -168,11 +172,9 @@ def share_file(request, file_id):
 
 @login_required
 def shared_files(request):
-
     files = File.objects.filter(
         shared_with=request.user
     )
-
     return render(
         request,
         'core/shared_files.html',

@@ -68,6 +68,10 @@
             {{ file.file.name|cut:"uploads/" }}-->
         </div>
 
+        <div class="file-date">
+        Uploaded: {{ file.uploaded_at|date:"d.m.Y H:i" }}
+        </div>
+
         <div class="file-actions">
             <a href="{{ file.file.url }}">Open</a> |
             <a href="/delete/{{ file.id }}/">Delete</a>
